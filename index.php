@@ -17,8 +17,34 @@
     />
 
     <link rel="stylesheet" href="css/style.css" />
-  </head>
+    <style media="screen">
+      .hide{
+        display:none;
+      }
+      .show{
+        display:block;
+      }
+    </style>
 
+    <script type="text/javascript" language="javascript">
+
+      window.onload=function()  //executes when the page finishes loading
+      {
+        setTimeout(func1, 500);  //sets a timer which calls function func1 after 2,000 milliseconds = 2 secs.
+        setTimeout(func2, 1000);  //sets a timer which calls function func1 after 2,000 milliseconds = 2 secs.
+
+      };
+      function func1()
+      {
+        document.getElementById("my_div").className="show";
+      }
+      function func2()
+      {
+        document.getElementById("my_div2").className="show";
+      }
+
+      // End hiding -->
+      </script>
   <body>
     <div class="container clearfix">
       <div class="people-list" id="people-list">
@@ -288,56 +314,64 @@
                   $res = mysqli_fetch_assoc($getResponse);
                   $response = $res['response'];
                   echo "
-                  <li class='clearfix'>
-                    <div class='message-data align-right'>
-                      <span class='message-data-time'>10:14 AM, Today</span> &nbsp;
-                      &nbsp; <span class='message-data-name'>You</span>
-                      <i class='fa fa-circle me'></i>
-                    </div>
-                    <div class='message other-message float-right'>
-                      $textValue
-                    </div>
-                  </li>
+                  <div id='my_div' class='hide'>
+                    <li class='clearfix'>
+                      <div class='message-data align-right'>
+                        <span class='message-data-time'>10:14 AM, Today</span> &nbsp;
+                        &nbsp; <span class='message-data-name'>You</span>
+                        <i class='fa fa-circle me'></i>
+                      </div>
+                      <div class='message other-message float-right'>
+                        $textValue
+                      </div>
+                    </li>
+                  </div>
 
-                  <li>
-                    <div class='message-data'>
-                      <span class='message-data-name'
-                        ><i class='fa fa-circle online'></i> Bot</span
-                      >
-                      <span class='message-data-time'>10:20 AM, Today</span>
-                    </div>
-                    <div class='message my-message'>
-                      $response
-                    </div>
-                  </li>";
+                  <div id='my_div2' class='hide'>
+                    <li>
+                      <div class='message-data'>
+                        <span class='message-data-name'
+                          ><i class='fa fa-circle online'></i> Bot</span
+                        >
+                        <span class='message-data-time'>10:20 AM, Today</span>
+                      </div>
+                      <div class='message my-message'>
+                        $response
+                      </div>
+                    </li>
+                  </div>";
 
                   $query = mysqli_query($connection, "INSERT INTO chats (request, response) VALUES ('$textValue', '$response')");
 
                 } else {
 
                   echo "
-                  <li class='clearfix'>
-                    <div class='message-data align-right'>
-                      <span class='message-data-time'>10:14 AM, Today</span> &nbsp;
-                      &nbsp; <span class='message-data-name'>You</span>
-                      <i class='fa fa-circle me'></i>
-                    </div>
-                    <div class='message other-message float-right'>
-                      $textValue
-                    </div>
-                  </li>
+                  <div id='my_div' class='hide'>
+                    <li class='clearfix'>
+                      <div class='message-data align-right'>
+                        <span class='message-data-time'>10:14 AM, Today</span> &nbsp;
+                        &nbsp; <span class='message-data-name'>You</span>
+                        <i class='fa fa-circle me'></i>
+                      </div>
+                      <div class='message other-message float-right'>
+                        $textValue
+                      </div>
+                    </li>
+                  </div>
 
-                  <li>
-                    <div class='message-data'>
-                      <span class='message-data-name'
-                        ><i class='fa fa-circle online'></i> Bot</span
-                      >
-                      <span class='message-data-time'>10:20 AM, Today</span>
-                    </div>
-                    <div class='message my-message'>
-                      Sorry! No response found !
-                    </div>
-                  </li>";
+                  <div id='my_div2' class='hide'>
+                    <li>
+                      <div class='message-data'>
+                        <span class='message-data-name'
+                          ><i class='fa fa-circle online'></i> Bot</span
+                        >
+                        <span class='message-data-time'>10:20 AM, Today</span>
+                      </div>
+                      <div class='message my-message'>
+                        Sorry! No response found !
+                      </div>
+                    </li>
+                  </div>";
 
                 }
               }
@@ -368,6 +402,7 @@
 
           <form method="post">
             <textarea name="textValue" placeholder="Type your message" rows="3"></textarea>
+            <!-- <a style="float: left" href="index.php?clear">Clear</a> -->
             <button name="submit" type="submit">Send</button>
           </form>
 
@@ -377,6 +412,18 @@
       <!-- end chat -->
     </div>
     <!-- end container -->
+
+    <!-- <h1 style="font-family: arial; text-align: center; font-size: 30px; color: #f8f8f8; margin-top: 15px">This project is developed by team ABC</h1> -->
+
+    <?php
+    if (isset($_GET['clear'])) {
+      $truncateQuery = mysqli_query($connection, "TRUNCATE TABLE chats");
+      if (!$truncateQuery) {
+        echo "error".mysqli_error($connection);
+      }
+      //header("Refresh: 0");
+    }
+    ?>
 
     <script id="message-template" type="text/x-handlebars-template">
       <li class="clearfix">
@@ -406,5 +453,6 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
 
     <script src="js/index.js"></script>
+  </head>
   </body>
 </html>
